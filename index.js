@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
+const userRouter = require("./routes/user");
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -30,3 +31,4 @@ const connectDB = async () => {
 };
 
 connectDB();
+app.use("/api/users", userRouter);

@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const expenseSchema = mongoose.Schema({
-  user_name: {
+  userName: {
     type: String,
     required: true,
   },
-  category_id: {
+  categoryId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
   },
@@ -13,11 +13,11 @@ const expenseSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  notes: {
-    type: Number,
-    required: true,
-  },
-  user_id: {
+  // notes: {
+  //   type: Number,
+  //   required: true,
+  // },
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },

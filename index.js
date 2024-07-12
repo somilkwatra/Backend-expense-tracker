@@ -4,6 +4,11 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const userRouter = require("./routes/user");
+const authRoutes = require("./routes/auth");
+
+const expenseRouter = require("./routes/expense");
+const category = require("./models/category");
+const categoryRouter = require("./routes/category");
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -32,3 +37,6 @@ const connectDB = async () => {
 
 connectDB();
 app.use("/api/users", userRouter);
+app.use("/api/expenses", expenseRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api/auth", authRoutes);

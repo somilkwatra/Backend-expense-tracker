@@ -13,10 +13,10 @@ const expenseSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  // notes: {
-  //   type: Number,
-  //   required: true,
-  // },
+  notes: {
+    type: String,
+    required: true,
+  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

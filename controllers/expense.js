@@ -2,13 +2,14 @@ const mongoose = require("mongoose");
 const Expense = require("../models/expense");
 
 const createExpense = async (req, res) => {
-  const { userName, categoryId, amount, userId, date } = req.body;
+  const { userName, categoryId, amount, notes, userId, date } = req.body;
 
   const expense = new Expense({
     userName,
     categoryId,
     amount,
     userId,
+    notes,
     date: date || new Date().toISOString(),
   });
 
@@ -34,7 +35,7 @@ const deleteExpense = async (req, res) => {
 
 const updateExpense = async (req, res) => {
   try {
-    const { userName, categoryId, amount, userId, date } = req.body;
+    const { userName, categoryId, amount, notes, userId, date } = req.body;
     const expense = await Expense.findByIdAndUpdate(
       req.params.id,
       {
@@ -42,6 +43,7 @@ const updateExpense = async (req, res) => {
         categoryId,
         amount,
         userId,
+        notes,
         date: date || new Date().toISOString(),
       },
       { new: true, runValidators: true }

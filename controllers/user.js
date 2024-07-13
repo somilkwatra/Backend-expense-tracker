@@ -64,16 +64,23 @@ const updateUser = async (req, res) => {
     return res.status(404).send(`No user with id: ${id}`);
   }
 
-  const { name, email, password } = req.body;
-  const user = new User({
-    _id: id,
-    name,
-    email,
-    password,
-  });
+  const { oldPassword, newPassword } = req.body;
 
   try {
-    const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).send(`No user with id: ${id}`);
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ message: "Old password is incorrect" });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+    user.password = hashedNewPassword;
+
+    const updatedUser = await user.save();
     res.json(updatedUser);
   } catch (error) {
     res.status(400).json({ message: error.message });

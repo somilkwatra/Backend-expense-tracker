@@ -49,11 +49,6 @@ const register = async (req, res) => {
       return res.status(400).json({ message: "Email already exists." });
     }
 
-    const existingName = await User.findOne({ name });
-    if (existingName) {
-      return res.status(400).json({ message: "Username already exists." });
-    }
-
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords don't match" });
     }

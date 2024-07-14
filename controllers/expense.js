@@ -70,7 +70,20 @@ const getExpenses = async (req, res) => {
 const getUserExpenses = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const expenses = await Expense.find({ userId: userId });
+    const { startDate, endDate } = req.query;
+    console.log("userId:", userId);
+    console.log("startDate:", startDate);
+    console.log("endDate:", endDate);
+
+    const query = { userId: userId };
+    if (startDate && endDate) {
+      query.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
+    }
+    console.log("query:", JSON.stringify(query));
+
+    const expenses = await Expense.find(query).sort({ date: -1 });
+    console.log("expenses:", expenses);
+
     res.status(200).json(expenses);
   } catch (error) {
     res.status(500).json({ message: error.message });

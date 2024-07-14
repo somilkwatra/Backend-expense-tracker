@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 const Expense = require("../models/expense");
 
 const createExpense = async (req, res) => {
-  const { userName, categoryId, amount, notes, userId, date } = req.body;
+  const { name, categoryId, amount, notes, userId, date } = req.body;
 
   const expense = new Expense({
-    userName,
+    name,
     categoryId,
     amount,
     userId,
@@ -35,11 +35,11 @@ const deleteExpense = async (req, res) => {
 
 const updateExpense = async (req, res) => {
   try {
-    const { userName, categoryId, amount, notes, userId, date } = req.body;
+    const { name, categoryId, amount, notes, userId, date } = req.body;
     const expense = await Expense.findByIdAndUpdate(
       req.params.id,
       {
-        userName,
+        name,
         categoryId,
         amount,
         userId,
@@ -67,10 +67,20 @@ const getExpenses = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const getUserExpenses = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const expenses = await Expense.find({ userId: userId });
+    res.status(200).json(expenses);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   createExpense,
   deleteExpense,
   updateExpense,
   getExpenses,
+  getUserExpenses,
 };

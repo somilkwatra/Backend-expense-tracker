@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 const Category = require("../models/category");
 const createCategory = async (req, res) => {
-  const { name, user_id } = req.body;
+  const { name, id } = req.body;
 
   const category = new Category({
     name,
-    user_id,
+    id,
   });
 
   try {
@@ -30,10 +30,10 @@ const deleteCategory = async (req, res) => {
 
 const updateCategory = async (req, res) => {
   try {
-    const { name, user_id } = req.body;
+    const { name, id } = req.body;
     const category = await Category.findByIdAndUpdate(
       req.params.id,
-      { name, user_id },
+      { name, id },
       { new: true, runValidators: true }
     );
 
@@ -47,9 +47,10 @@ const updateCategory = async (req, res) => {
   }
 };
 
-const getCategories = async (req, res) => {
+const getCategoriesByUserId = async (req, res) => {
   try {
-    const categories = await Category.find();
+    const userId = req.params.userId;
+    const categories = await Category.find({ userId: userId });
     res.status(200).json(categories);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -74,6 +75,6 @@ module.exports = {
   createCategory,
   deleteCategory,
   updateCategory,
-  getCategories,
+  getCategoriesByUserId,
   getCategory,
 };

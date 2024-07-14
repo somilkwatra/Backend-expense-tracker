@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const expenseSchema = mongoose.Schema({
-  userName: {
+  name: {
     type: String,
     required: true,
   },

@@ -24,16 +24,10 @@ const login = async (req, res) => {
       email: user.email,
       id: user._id,
     });
-    const refreshToken = jwt.sign(
-      { userName: user.name, id: user._id },
-      secret,
-      { expiresIn: "24h" }
-    );
 
     res.json({
       result: user,
       accessToken: accessToken,
-      refreshToken: refreshToken,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -69,16 +63,9 @@ const register = async (req, res) => {
       id: newUser._id,
     });
 
-    const refreshToken = jwt.sign(
-      { userName: newUser.name, id: newUser._id },
-      secret,
-      { expiresIn: "24h" }
-    );
-
     res.status(201).json({
       result: newUser,
       accessToken: accessToken,
-      refreshToken: refreshToken,
     });
   } catch (error) {
     res.status(400).json({ message: error.message });

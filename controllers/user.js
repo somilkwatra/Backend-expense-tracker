@@ -58,7 +58,8 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+const changePassword = async (req, res) => {
+  // change password
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).send(`No user with id: ${id}`);
@@ -87,4 +88,4 @@ const updateUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getUsers, getUser, updateUser, deleteUser };
+module.exports = { createUser, getUsers, getUser, changePassword, deleteUser };

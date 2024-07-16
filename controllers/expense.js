@@ -45,8 +45,8 @@ const updateExpense = async (req, res) => {
         userId,
         notes,
         date: date || new Date().toISOString(),
-      },
-      { new: true, runValidators: true }
+      }
+      // { new: true, runValidators: true }
     );
 
     if (!expense) {
@@ -75,10 +75,7 @@ const getUserExpenses = async (req, res) => {
     if (startDate && endDate) {
       query.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
     }
-    console.log("query:", JSON.stringify(query));
-
     const expenses = await Expense.find(query).sort({ date: -1 });
-
     res.status(200).json(expenses);
   } catch (error) {
     res.status(500).json({ message: error.message });

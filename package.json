@@ -9,6 +9,7 @@
   "license": "ISC",
   "description": "This is the Backend part of expense tracker",
   "dependencies": {
+    "@auth0/angular-jwt": "^5.2.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

@@ -61,21 +61,36 @@ const updateExpense = async (req, res) => {
 
 const getExpenses = async (req, res) => {
   try {
-    const expenses = await Expense.find();
+    const expenses = await Expense.find()
+      .populate({
+        path: "categoryId",
+        select: "name",
+      })
+      .sort({ date: -1 });
+
     res.status(200).json(expenses);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 const getUserExpenses = async (req, res) => {
   try {
     const userId = req.params.userId;
     const { startDate, endDate } = req.query;
     const query = { userId: userId };
+
     if (startDate && endDate) {
       query.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
     }
-    const expenses = await Expense.find(query).sort({ date: -1 });
+
+    const expenses = await Expense.find(query)
+      .populate({
+        path: "categoryId",
+        select: "name",
+      })
+      .sort({ date: -1 });
+
     res.status(200).json(expenses);
   } catch (error) {
     res.status(500).json({ message: error.message });

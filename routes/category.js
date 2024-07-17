@@ -15,7 +15,7 @@ router.put("/:id", categoryController.updateCategory);
 router.get("/:userId", categoryController.getCategoriesByUserId);
 
 // Route to get a category by ID
-router.get("/:id", categoryController.getCategory);
+router.get("/c1/:id", categoryController.getCategory);
 
 // Route to get the most used category by user ID
 router.get("/most-used/:userId", categoryController.getMostUsedCategory);

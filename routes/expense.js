@@ -10,7 +10,7 @@ const {
 
 router.post("/", createExpense);
 
-router.delete("/:id", deleteExpense);
+router.delete("/:categoryId", deleteExpense);
 
 router.put("/:id", updateExpense);
 

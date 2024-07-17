@@ -1,21 +1,26 @@
 const express = require("express");
 const router = express.Router();
-const {
-  createCategory,
-  deleteCategory,
-  updateCategory,
-  getCategoriesByUserId,
-  getCategory,
-} = require("../controllers/category");
+const categoryController = require("../controllers/category");
 
-router.post("/", createCategory);
+// Route to create a new category
+router.post("/", categoryController.createCategory);
 
-router.delete("/:id", deleteCategory);
+// Route to delete a category by ID
+router.delete("/:id", categoryController.deleteCategory);
 
-router.put("/:id", updateCategory);
+// Route to update a category by ID
+router.put("/:id", categoryController.updateCategory);
 
-router.get("/:id", getCategoriesByUserId);
+// Route to get all categories by user ID
+router.get("/:userId", categoryController.getCategoriesByUserId);
 
-router.get("/:id", getCategory);
+// Route to get a category by ID
+router.get("/:id", categoryController.getCategory);
+
+// Route to get the most used category by user ID
+router.get("/most-used/:userId", categoryController.getMostUsedCategory);
+
+// Route to get the least used category by user ID
+router.get("/least-used/:userId", categoryController.getLeastUsedCategory);
 
 module.exports = router;

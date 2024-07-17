@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Expense = require("../models/expense");
 const Category = require("../models/category");
 
 const createCategory = async (req, res) => {
@@ -77,15 +78,34 @@ const getMostUsedCategory = async (req, res) => {
     const userId = req.params.userId;
     console.log(`Finding most used category for userId: ${userId}`);
 
-    const totalCategories = await Category.countDocuments({
+    // Get the total number of entries (expenses) for the user
+    const totalExpenses = await Expense.countDocuments({
       userId: new mongoose.Types.ObjectId(userId),
     });
 
-    const mostUsedCategory = await Category.aggregate([
+    const mostUsedCategory = await Expense.aggregate([
       { $match: { userId: new mongoose.Types.ObjectId(userId) } },
-      { $group: { _id: "$name", count: { $sum: 1 } } },
+      { $group: { _id: "$categoryId", count: { $sum: 1 } } },
       { $sort: { count: -1 } },
       { $limit: 1 },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "_id",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: "$category",
+      },
+      {
+        $project: {
+          _id: 0,
+          name: "$category.name",
+          count: 1,
+        },
+      },
     ]);
 
     console.log("Most used category aggregation result:", mostUsedCategory);
@@ -94,10 +114,10 @@ const getMostUsedCategory = async (req, res) => {
       return res.status(404).json({ message: "Most used category not found" });
     }
 
-    const percentage = (mostUsedCategory[0].count / totalCategories) * 100;
+    const percentage = (mostUsedCategory[0].count / totalExpenses) * 100;
 
     res.status(200).json({
-      name: mostUsedCategory[0]._id,
+      name: mostUsedCategory[0].name,
       count: mostUsedCategory[0].count,
       percentage: percentage.toFixed(2) + "%",
     });
@@ -112,15 +132,34 @@ const getLeastUsedCategory = async (req, res) => {
     const userId = req.params.userId;
     console.log(`Finding least used category for userId: ${userId}`);
 
-    const totalCategories = await Category.countDocuments({
+    // Get the total number of entries (expenses) for the user
+    const totalExpenses = await Expense.countDocuments({
       userId: new mongoose.Types.ObjectId(userId),
     });
 
-    const leastUsedCategory = await Category.aggregate([
+    const leastUsedCategory = await Expense.aggregate([
       { $match: { userId: new mongoose.Types.ObjectId(userId) } },
-      { $group: { _id: "$name", count: { $sum: 1 } } },
+      { $group: { _id: "$categoryId", count: { $sum: 1 } } },
       { $sort: { count: 1 } },
       { $limit: 1 },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "_id",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $unwind: "$category",
+      },
+      {
+        $project: {
+          _id: 0,
+          name: "$category.name",
+          count: 1,
+        },
+      },
     ]);
 
     console.log("Least used category aggregation result:", leastUsedCategory);
@@ -129,10 +168,10 @@ const getLeastUsedCategory = async (req, res) => {
       return res.status(404).json({ message: "Least used category not found" });
     }
 
-    const percentage = (leastUsedCategory[0].count / totalCategories) * 100;
+    const percentage = (leastUsedCategory[0].count / totalExpenses) * 100;
 
     res.status(200).json({
-      name: leastUsedCategory[0]._id,
+      name: leastUsedCategory[0].name,
       count: leastUsedCategory[0].count,
       percentage: percentage.toFixed(2) + "%",
     });

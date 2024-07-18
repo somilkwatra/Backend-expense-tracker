@@ -96,6 +96,26 @@ const getUserExpenses = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+const getExpense = async (req, res) => {
+  try {
+    console.log("Expense ID:", req.params.id);
+    const expense = await Expense.findById(req.params.id).populate({
+      path: "categoryId",
+      select: "name",
+    });
+
+    console.log("Expense:", expense);
+
+    if (!expense) {
+      return res.status(404).json({ message: "Expense not found" });
+    }
+
+    res.status(200).json(expense);
+  } catch (error) {
+    console.error("Error:", error); // Log the error
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   createExpense,
@@ -103,4 +123,5 @@ module.exports = {
   updateExpense,
   getExpenses,
   getUserExpenses,
+  getExpense,
 };

@@ -15,7 +15,6 @@ const expenseSchema = mongoose.Schema({
   },
   notes: {
     type: String,
-    required: true,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
